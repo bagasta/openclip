@@ -1,0 +1,11 @@
+.venv/
+data/
+exports/
+__pycache__/
+*.pyc
+.pytest_cache/
+.env
+.env.*
+!.env.example
+cookies.txt
+*.cookies.txt

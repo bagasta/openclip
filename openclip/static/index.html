@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>OpenClip Local</title><link rel="stylesheet" href="/static/style.css?v=20261027-youtube-login">
+</head>
+<body>
+<svg class="symbols" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><symbol id="i-cut" viewBox="0 0 24 24"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="m8.2 8.2 12 12M8.2 15.8 20 4M14 10l-2 2"/></symbol><symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol><symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 16V3m-5 5 5-5 5 5M4 15v5h16v-5"/></symbol><symbol id="i-film" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 4v16M17 4v16M3 9h4m-4 6h4m10-6h4m-4 6h4"/></symbol><symbol id="i-down" viewBox="0 0 24 24"><path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5"/></symbol><symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol></svg>
+<header class="app-header">
+  <a class="brand" href="/"><span class="brand-mark"><svg><use href="#i-cut"/></svg></span><span>OpenClip<span class="brand-local">LOCAL</span></span></a>
+  <div class="header-note">Ruang edit video di laptopmu</div>
+  <button id="ai-settings" class="secondary settings-trigger" type="button">Pengaturan AI</button>
+  <button id="youtube-settings" class="secondary" type="button">Login YouTube</button>
+  <span class="connection" id="connection">Menghubungkan…</span>
+</header>
+<div class="workspace">
+  <aside class="library" aria-label="Daftar proyek">
+    <button class="new-project" id="new-project"><svg><use href="#i-plus"/></svg> Proyek baru</button>
+    <div class="rail-heading">PUSTAKA <span id="project-count">0</span></div>
+    <nav id="projects" aria-label="Proyek video"><p class="muted small">Belum ada proyek.</p></nav>
+    <div class="machine"><span class="machine-dot"></span><strong>Render di laptop</strong><p id="machine-info">Memeriksa mesin…</p><p>Subtitle dan kurasi memakai OpenRouter.</p></div>
+  </aside>
+  <main>
+    <div class="page-heading"><div><div class="eyebrow">VIDEO WORKSPACE</div><h1 id="page-title">Video panjang. Potongan pilihan.</h1><p id="page-description">Pilih momen, rapikan format, simpan klip.</p></div><button id="delete-project" class="quiet danger" hidden>Hapus proyek</button></div>
+    <div class="editor-layout">
+      <section class="source-panel" aria-label="Video dan pengaturan">
+        <form id="create-form">
+          <div class="section-title"><span class="step-number">01</span><h2>Sumber video</h2></div>
+          <div class="source-tabs" role="group" aria-label="Jenis sumber"><button type="button" class="source-tab active" data-source="file" aria-pressed="true">File lokal</button><button type="button" class="source-tab" data-source="url" aria-pressed="false">Tautan video</button></div>
+          <div id="file-source"><label class="upload-zone" id="drop-zone" for="video-input"><svg><use href="#i-upload"/></svg><strong id="upload-label">Pilih atau letakkan video</strong><span>MP4, MOV, MKV, WEBM · Sesuai ruang disk</span></label><input id="video-input" name="video" type="file" accept="video/*,.mkv" class="file-input"></div>
+          <div id="url-source" hidden><label for="url-input">Tautan sumber</label><input id="url-input" name="url" type="url" placeholder="https://www.youtube.com/watch?v=…"><p class="helper">YouTube atau sumber publik yang didukung yt-dlp. Tidak semua situs mengizinkan unduhan.</p><label for="source-resolution">Kualitas sumber</label><select id="source-resolution" name="source_resolution"><option value="2160">Terbaik tersedia · hingga 4K</option><option value="1080">Hingga 1080p</option><option value="720">Hingga 720p · hemat</option></select><p class="helper">Unduhan lebih dari 1 GB didukung selama ruang disk cukup. Siapkan ruang untuk sumber, penggabungan audio/video, dan hasil klip.</p>
+            <details id="new-youtube-access" class="advanced"><summary>Akses YouTube · opsional</summary>
+              <button id="new-youtube-login" class="secondary full" type="button">Login YouTube lewat browser</button>
+              <input id="new-youtube-profile" name="youtube_profile" type="hidden" value="default"><p id="new-youtube-session-info" class="helper"></p>
+              <label for="new-youtube-auth">Sesi untuk unduhan</label><select id="new-youtube-auth" name="youtube_auth"><option value="none">Tanpa sesi login</option><option value="chrome">Browser · Chrome</option><option value="chromium">Browser · Chromium</option><option value="firefox">Browser · Firefox</option><option value="brave">Browser · Brave</option><option value="edge">Browser · Edge</option><option value="vivaldi">Browser · Vivaldi</option><option value="opera">Browser · Opera</option><option value="file">File cookies.txt</option></select>
+              <p class="helper">Jika YouTube meminta verifikasi, login dan buka videonya di browser pilihanmu. yt-dlp memilih profil secara otomatis. Saat unduhan dijalankan, cookie profil dibaca; hanya cookie YouTube yang dipakai aplikasi. Gunakan file cookie jika akun pada profil yang terbaca berbeda.</p>
+              <div id="new-youtube-cookie-row" hidden><label for="new-youtube-cookies">Cookie YouTube · format Netscape</label><input id="new-youtube-cookies" name="youtube_cookies" type="file" accept=".txt" disabled><p class="helper">Maksimal 2 MB. Cookie menyimpan sesi login; jangan dibagikan. File disimpan privat di laptop dan tidak masuk hasil ekspor.</p></div>
+              <p class="helper">Cookie dipakai untuk akses YouTube, terpisah dari OpenRouter. <a href="https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies" target="_blank" rel="noopener noreferrer">Panduan ekspor cookie</a>.</p>
+            </details>
+          </div>
+          <div id="source-preview" hidden><video id="source-player" controls preload="metadata" playsinline></video><div class="source-meta" id="source-meta"></div></div>
+          <div class="section-title settings-title"><span class="step-number">02</span><h2>Atur potongan</h2></div>
+          <label for="prompt">Topik pilihan <span class="optional">opsional</span></label><textarea id="prompt" name="prompt" rows="2" placeholder="Contoh: kesalahan bisnis dan pelajaran yang didapat"></textarea>
+          <div class="field-row"><div><label for="min-duration">Minimum (detik)</label><input id="min-duration" name="min_duration" type="number" value="45" min="5" max="240" required></div><div><label for="max-duration">Maksimum (detik)</label><input id="max-duration" name="max_duration" type="number" value="180" min="5" max="240" required></div></div>
+          <div class="field-row"><div><label for="clip-count">Jumlah klip</label><select id="clip-count" name="clip_count"><option value="3">3 klip</option><option value="1">1 klip</option><option value="2">2 klip</option><option value="4">4 klip</option><option value="5">5 klip</option></select></div><div><label for="aspect">Format</label><select id="aspect" name="aspect"><option value="9:16">9:16 · Vertikal</option><option value="1:1">1:1 · Persegi</option><option value="16:9">16:9 · Lanskap</option></select></div></div>
+          <label for="framing">Komposisi</label><select id="framing" name="framing"><option value="auto">Ikuti pembicara (lokal)</option><option value="center">Crop tengah</option><option value="fit">Tampilkan seluruh gambar</option></select>
+          <label for="resolution">Resolusi hasil</label><select id="resolution" name="resolution"><option value="1080">1080p · Sesuai acuan</option><option value="720">720p · Render lebih ringan</option></select>
+          <label for="encoding-quality">Kualitas ekspor</label><select id="encoding-quality" name="encoding_quality"><option value="high">Tinggi · detail lebih terjaga</option><option value="standard">Ringan · render lebih cepat</option></select><p class="helper">Kualitas tinggi memakai waktu render dan ukuran file lebih besar. Ketajaman tetap mengikuti sumber video.</p>
+          <label class="check"><input name="captions" id="captions" type="checkbox" checked><span>Subtitle kata demi kata</span></label>
+          <details class="advanced"><summary>Transkripsi dan penilaian</summary>
+            <p class="helper">Subtitle, kurasi, dan judul memakai OpenRouter. Atur API key dan model di Pengaturan AI. Biaya mengikuti pemakaian video dan model, lalu dicatat pada proyek.</p>
+            <label for="language">Bahasa sumber</label><select id="language" name="language"><option value="auto">Deteksi otomatis</option><option value="id">Indonesia</option><option value="en">Inggris</option><option value="ja">Jepang</option><option value="ko">Korea</option><option value="zh">Mandarin</option><option value="es">Spanyol</option><option value="fr">Prancis</option><option value="de">Jerman</option></select>
+            <label for="subtitle">Pakai SRT sendiri <span class="optional">opsional</span></label><input id="subtitle" name="subtitle" type="file" accept=".srt"><p class="helper">SRT menggantikan transkripsi audio. Waktu setiap kata diperkirakan dari blok SRT; kurasi tetap memakai OpenRouter.</p>
+          </details>
+          <p id="form-error" class="error-text" role="alert" hidden></p>
+          <button class="primary process-button" type="submit" id="submit-button"><svg><use href="#i-cut"/></svg> Buat klip</button>
+          <p class="submit-note">Satu proyek diproses dalam satu waktu.</p>
+        </form>
+        <section id="existing-source" hidden><div class="section-title"><span class="step-number">01</span><h2>Sumber video</h2></div><video id="existing-player" controls preload="metadata" playsinline></video><p class="source-meta" id="existing-meta"></p><div id="existing-settings" class="config-summary"></div><a id="transcript-download" class="text-link" hidden>Unduh transkrip SRT</a><button class="secondary full" id="show-transcript" hidden>Lihat transkrip</button><div id="transcript-content" hidden></div>
+          <details id="youtube-access" class="advanced" hidden><summary>Akses YouTube</summary><form id="youtube-auth-form">
+            <button id="project-youtube-login" class="secondary full" type="button">Login YouTube lewat browser</button>
+            <input id="youtube-profile" name="youtube_profile" type="hidden" value="default"><p id="youtube-session-info" class="helper"></p>
+            <p class="helper">Login YouTube dan buka video sumber di browser pilihanmu terlebih dahulu. Saat unduh dijalankan, yt-dlp membaca cookie profil yang dipilih otomatis; hanya cookie YouTube yang dipakai aplikasi. Jika akun yang terbaca berbeda, gunakan file cookie dari profil yang benar.</p>
+            <label for="youtube-auth">Sesi untuk unduhan</label><select id="youtube-auth" name="youtube_auth"><option value="none">Tanpa sesi login</option><option value="chrome">Browser · Chrome</option><option value="chromium">Browser · Chromium</option><option value="firefox">Browser · Firefox</option><option value="brave">Browser · Brave</option><option value="edge">Browser · Edge</option><option value="vivaldi">Browser · Vivaldi</option><option value="opera">Browser · Opera</option><option value="file">File cookies.txt</option></select>
+            <div id="youtube-cookie-row" hidden><label for="youtube-cookies">Cookie YouTube · format Netscape</label><input id="youtube-cookies" name="youtube_cookies" type="file" accept=".txt" disabled><p class="helper">Maksimal 2 MB. Kosongkan untuk memakai file yang sudah disimpan. Jika belum ada, pilih file terlebih dahulu.</p></div>
+            <p class="helper">Cookie adalah sesi login; jangan dibagikan. File disimpan privat di laptop, tidak masuk ekspor, dan tidak dikirim ke OpenRouter. Pilih Tanpa sesi login lalu simpan untuk menghapus file cookie tersimpan.</p>
+            <p class="helper"><a href="https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies" target="_blank" rel="noopener noreferrer">Panduan ekspor cookie YouTube</a>. Jika browser gagal dibaca, gunakan file cookies.txt dari profil yang sudah login.</p>
+            <button class="secondary full" type="submit">Simpan akses YouTube</button><p id="youtube-auth-message" class="helper" role="status"></p><p id="youtube-auth-error" class="error-text" role="alert" hidden></p>
+          </form></details>
+          <button class="secondary full" id="reframe-project">Render ulang kamera · ikuti pembicara</button><p class="helper">Mengikuti gerakan bibir saat ada ujaran. Memakai potongan dan transkrip tersimpan, diproses lokal tanpa request OpenRouter baru.</p>
+          <details class="advanced"><summary>Perbaiki kualitas gambar</summary><form id="image-quality-form">
+            <p id="image-quality-hint" class="helper"></p>
+            <label class="check"><input id="upgrade-source" name="upgrade_source" type="checkbox" checked><span>Unduh ulang sumber resolusi lebih tinggi</span></label>
+            <label for="upgrade-resolution">Kualitas sumber yang dicari</label><select id="upgrade-resolution" name="source_resolution"><option value="2160">Terbaik tersedia · hingga 4K</option><option value="1080">Hingga 1080p</option><option value="720">Hingga 720p</option></select>
+            <p class="helper">Ekspor 1080p dengan kompresi kualitas tinggi. Sumber terbaik mengikuti ketersediaan dan ruang disk. Potongan, judul, subtitle, dan pilihan kamera dipakai kembali tanpa request OpenRouter baru.</p>
+            <button class="primary full" type="submit">Render ulang kualitas tinggi</button><p id="image-quality-error" class="error-text" role="alert" hidden></p>
+          </form></details>
+          <details class="advanced"><summary>Perbaiki subtitle dan kurasi</summary><form id="quality-form">
+            <p class="helper">Subtitle dan kurasi diperbarui memakai model OpenRouter dari Pengaturan AI. Biaya mengikuti pemakaian; respons transkripsi tersimpan dipakai kembali jika model dan bahasa sama.</p>
+            <div class="field-row"><div><label for="quality-min">Min. detik</label><input id="quality-min" name="min_duration" type="number" value="45" min="5" max="240"></div><div><label for="quality-max">Maks. detik</label><input id="quality-max" name="max_duration" type="number" value="180" min="5" max="240"></div></div>
+            <p class="helper">Sumber yang sudah diunduh dipakai lagi. Hasil baru 1080p, gaya subtitle acuan, tanpa watermark.</p><button class="primary full" type="submit">Proses ulang dengan kualitas baru</button><p id="quality-error" class="error-text" role="alert" hidden></p>
+          </form></details>
+        </section>
+      </section>
+      <section class="results-panel" aria-label="Hasil klip">
+        <div class="results-heading"><div class="section-title"><span class="step-number">03</span><h2>Klip pilihan <span class="result-count" id="clip-total"></span></h2></div><span class="subtle-label" id="ranking-label">SIAP DIPROSES</span></div>
+        <div id="job-status" hidden><div class="progress-heading"><strong id="job-message"></strong><span id="job-percent"></span></div><progress id="progress" max="100" value="0"></progress><div class="stage-list" id="stage-list"></div><div class="job-actions"><button class="quiet" id="cancel-project" hidden>Batalkan proses</button><button class="secondary" id="resume-project" hidden>Lanjutkan / coba lagi</button></div></div>
+        <div id="job-error" class="error-box" role="alert" hidden></div><div id="job-warnings" class="warnings" hidden></div>
+        <div id="youtube-error-actions" class="clip-actions" hidden><button id="error-youtube-login" class="secondary" type="button">Login YouTube</button><button id="error-youtube-cookies" class="quiet" type="button">Atur cookie YouTube</button></div>
+        <div id="export-tools" hidden><div class="clip-actions"><button id="save-exports" class="secondary">Simpan hasil ke folder</button><a id="download-all" class="download" download>Unduh semua ZIP</a><button id="open-exports" class="quiet" hidden>Buka folder hasil</button></div><p id="export-location" class="helper"></p></div>
+        <div id="empty-state" class="empty-state"><div class="empty-frame"><svg><use href="#i-film"/></svg><div class="frame-corner corner-tl"></div><div class="frame-corner corner-br"></div></div><h3>Momen berikutnya dimulai di sini.</h3><p>Masukkan video untuk menemukan potongan percakapan yang bisa berdiri sendiri.</p><span class="empty-note">Tinjau dulu, lalu unduh MP4 dan subtitle.</span></div>
+        <div id="clips" class="clip-grid"></div>
+      </section>
+    </div>
+  </main>
+</div>
+<dialog id="settings-dialog" aria-labelledby="settings-title"><div class="dialog-heading"><h2 id="settings-title">OpenRouter</h2><button id="close-settings" class="quiet" type="button">Tutup</button></div><p class="helper">Key disimpan di laptop dengan izin file terbatas dan tidak ditampilkan kembali. Audio/transkrip dikirim ke OpenRouter saat kamu menjalankan pemrosesan subtitle dan kurasi.</p><form id="router-settings-form"><label for="api-key">API key</label><input id="api-key" type="password" autocomplete="off" placeholder="sk-or-… (kosongkan untuk mempertahankan key)"><p id="key-status" class="helper">Memeriksa konfigurasi…</p><label for="asr-cloud-model">Model subtitle</label><select id="asr-cloud-model"><option value="openai/whisper-large-v3">Whisper Large V3</option><option value="openai/whisper-large-v3-turbo">Whisper Large V3 Turbo</option><option value="openai/whisper-1">Whisper 1</option></select><label for="chat-cloud-model">Model kurasi dan judul</label><input id="chat-cloud-model" value="google/gemini-2.5-flash"><p class="helper">Gunakan ID model chat OpenRouter untuk kurasi dan judul. Biaya mengikuti pemakaian model yang dipilih.</p><button class="primary full" type="submit">Simpan pengaturan</button><p id="settings-message" class="helper" role="status"></p></form></dialog>
+<dialog id="youtube-dialog" aria-labelledby="youtube-title">
+  <div class="dialog-heading"><h2 id="youtube-title">Akses YouTube</h2><button id="close-youtube" class="quiet" type="button">Tutup</button></div>
+  <p id="youtube-login-context" class="helper"></p>
+  <p class="helper">Login dilakukan di situs YouTube/Google dalam jendela browser khusus OpenClip. Sesi disimpan di laptop dan dipakai untuk unduhan saat kamu memilih Gunakan sesi. Password diisi langsung di browser tersebut.</p>
+  <label for="youtube-login-browser">Browser untuk login</label><select id="youtube-login-browser"></select>
+  <button id="launch-youtube-login" class="primary full" type="button">1. Buka login YouTube</button>
+  <p class="helper">Selesaikan login dan pastikan video sumber bisa diputar. Tutup jendela browser itu, lalu kembali ke sini. OpenClip memakai profil khusus tersebut agar sesi tidak tertukar dengan profil browser lain.</p>
+  <button id="use-youtube-login" class="secondary full" type="button" disabled>2. Sudah login · gunakan sesi</button>
+  <p id="youtube-login-message" class="helper" role="status"></p><p id="youtube-login-error" class="error-text" role="alert" hidden></p>
+  <button id="youtube-upload-instead" class="quiet full" type="button">Gunakan file cookies.txt</button>
+  <p class="helper">Sesi baru dibaca saat unduh dijalankan. Untuk keluar akun, buka kembali jendela login ini dan gunakan menu akun YouTube. File video lokal tetap bisa diunggah jika akses YouTube ditolak.</p>
+</dialog>
+<div id="toast" role="status" hidden></div>
+<script src="/static/app.js?v=20261027-youtube-login" defer></script>
+</body></html>

@@ -1,0 +1,8 @@
+fastapi==0.119.0
+uvicorn==0.37.0
+python-multipart==0.0.20
+yt-dlp[default]==2026.10.21
+SecretStorage==3.5.0; sys_platform == 'linux'
+opencv-contrib-python==4.14.0.94
+mediapipe==1.1.1
+httpx==0.28.1
